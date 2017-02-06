@@ -1,0 +1,163 @@
+<?php
+/*
+   Copyright 2009 Bernard Peh
+
+   This file is part of PHP Quick Calendar.
+
+   NOTICE OF LICENSE
+
+   This source file is subject to the Open Software License (OSL 3.0)
+   that is bundled with this package in the file LICENSE.txt.
+   It is also available through the world-wide-web at this URL:
+   http://opensource.org/licenses/osl-3.0.php
+*/
+
+require_once(QCALENDAR_SYS_PATH.'/QCalendarBase.php');
+
+class QCalendarTwocolumn extends QCalendarBase {
+
+    // uses parent constructor by default
+    
+    /**
+     * Overwrite parent header for the calendar.
+     */
+    function createHeader() {
+        
+        // register default header view var
+        parent::createHeader();
+    }
+    
+    /**
+     * Overwrite parent html body. This is the main bulk of the logic. modify at your own risks.
+     */
+    function createBody(){
+        
+        // start rendering table    
+        for($i=0;$i<$this->weeksInMonth;$i++) {
+            for ($j=0;$j<7;$j++) {
+                
+                // check if if is today
+                if (($this->today['day'] == $this->cell[$i][$j]['value']) && 
+                        ($this->today['month'] == $this->month) && 
+                        ($this->today['year'] == $this->year)) {
+                    $this->cell[$i][$j]['isToday'] = 1;
+                }
+                // else normal day
+                else {
+                    $this->cell[$i][$j]['isToday'] = 0;
+                }
+                // init defaults
+                $this->cell[$i][$j]['day'] = $this->cell[$i][$j]['value'];
+                $this->cell[$i][$j]['short_desc'][] = '';
+                $this->cell[$i][$j]['short_desc_image'][] ='';
+                                
+                // if days with link
+                $count = 0;
+                 foreach ($this->links as $val) {
+                    if (($val['day'] == $this->cell[$i][$j]['value']) && 
+                            (($val['month'] == $this->month) || 
+                            ($val['month'] == '*')) && 
+                            (($val['year'] == $this->year) || 
+                            ($val['year'] == '*'))) {
+                        $start_time = $val['start_time'];
+                        $end_time = $val['end_time'];
+                        $start = $end = '';
+                        $start_hour = $end_hour = $start_min = $end_min = 0;
+                        if ( $start_time <= 1200 ) {
+                            $start_hour = floor( $start_time / 100 );
+                            $start_min = $start_time - $start_hour * 100;
+                            if ( $start_min < 10 )
+                                $start = $start_hour . ':0' . $start_min . ' a.m.';
+                            else 
+                                $start = $start_hour . ':' . $start_min . ' a.m.';
+                        } else {
+                            $start_time -= 1200;
+                            $start_hour = floor( $start_time / 100 );
+                            $start_min = $start_time - $start_hour * 100;
+                            if ( $start_min < 10 )
+                                $start = $start_hour . ':0' . $start_min . ' p.m.';
+                            else 
+                                $start = $start_hour . ':' . $start_min . ' p.m.';
+                        }
+                        if ( $end_time <= 1200 ) {
+                            $end_hour = floor( $end_time / 100 );
+                            $end_min = $end_time - $end_hour * 100;
+                            if ( $end_min < 10 )
+                                $end = $end_hour . ':0' . $end_min . ' a.m.';
+                            else 
+                                $end = $end_hour . ':' . $end_min . ' a.m.';
+                        } else {
+                            $end_time -= 1200;
+                            $end_hour = floor( $end_time / 100 );
+                            $end_min = $end_time - $end_hour * 100;
+                            if ( $end_min < 10 )
+                                $end = $end_hour . ':0' . $end_min . ' p.m.';
+                            else 
+                                $end = $end_hour . ':' . $end_min . ' p.m.';
+                        }
+                        if ( $val['use_type'] == 'meeting' ){
+                            if ( $this->cat_id == 'Guest' ) {
+                                continue;
+                            }
+                            if ($val['committee_name'] == '') {
+                                $message = "{$start} - ${end} - Mtg - {$val['room']}";
+                                $message .= " -- {$val['purpose']} - ";
+                                $message .= "({$val['last_name']})";
+                                
+                            } else {
+                                $message = "{$start} - ${end} - Mtg - {$val['room']}";
+                                $message .= " -- {$val['purpose']} - Committee: {$val['committee_name']} ";
+                                $message .= "({$val['last_name']})";
+                            }
+                            
+                        } else if ( $val['use_type'] == 'event' ) {
+                            if ( $this->cat_id == 'Guest' ) {
+                                continue;
+                            }
+                            $message = "Event:  {$val['description']} ";
+                            if ( $start_hour > 0 ){
+                                $message .= " - Start: {$start}";
+                            }
+                            if ( $end_hour > 0 ){
+                                $message .= " - End: {$end}";
+                            }
+                                $message .= "({$val['last_name']})";
+                        } else {
+                            if ( $this->cat_id == 'Mtg' ) {
+                                continue;
+                            }
+                            if ( $val['backup'] == '1' ) {
+                                $message = "{$val['room']} -- Backup reservation: {$val['unit']} ";                                
+                            } else {
+                                $message = "{$val['room']} -- Reserved by Unit: {$val['unit']} ";                                
+                            }
+                            $message .= "({$val['first_name']} {$val['last_name']})";
+                            $message .= " on {$val['reserve_month']}/{$val['reserve_day']}/{$val['reserve_year']}";
+                        }
+                        
+                        $this->cell[$i][$j]['short_desc'][$count] = $message;
+                        //        "{$val['room']} -- Reserved by Unit: {$val['unit']} ({$val['first_name']} {$val['last_name']}) on {$val['reserve_month']}/{$val['reserve_day']}/{$val['reserve_year']}";
+                        // $this->cell[$i][$j]['short_desc_image'][$count] = $val['short_desc_image'];
+
+                        $count++;
+                    }
+                }    
+            }
+        }    
+        // register default body view var
+        parent::createBody();
+        $view = array();
+        $view['cell'] = $this->cell;
+        $this->registerView($view);
+    }
+    
+    /**
+     * Overwrite parent html footer.
+     */
+    function createFooter() {
+    
+        // register default footer view var
+        parent::createFooter();
+    }
+}
+?>

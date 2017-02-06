@@ -1,0 +1,181 @@
+body { 
+  background-color:#0066cc;
+  /* background-color:#ff8432;  */
+  color:black; 
+} 
+
+a:link { color:black; }
+a:visited { color:#000084; }
+a:hover { color:white; }
+a:active { color:#0000ff; }
+
+div.center { 
+  color:black;
+  text-align:center;
+}
+
+div.smallleft {
+  font-size:.75em;
+  font-family:"Arial", sans-serif;
+  text-align:left;
+}
+
+div.smallcenter {
+  color:#000084;
+  font-size:.75em;
+  font-family:"Arial", sans-serif;
+  text-align:center;
+}
+
+div.smallright {
+  color:#000084;
+  font-size:.75em;
+  font-family:"Arial", sans-serif;
+  text-align:right;
+}
+
+table.full {
+  width:100%;
+  horizontal-align:center;
+}
+
+table.heading {
+  margin-left:auto;
+  margin-right:auto;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+  width:100%;
+}
+
+table.top-form {
+  margin-left:auto;
+  margin-right:auto;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+  width:70%;
+}
+
+#responsemessage {
+  background-color:#cccccc;
+  color:#000084;
+  font-size:.9em;
+  font-family:"Arial", sans-serif;
+  text-align:center;
+}
+
+td.blackcenter {
+  color:black;
+  font-size:1em;
+  font-family:"Arial", sans-serif;
+  text-align:center;
+}
+
+td.blackleft {
+  color:black;
+  font-size:1em;
+  font-family:"Arial", sans-serif;
+  text-align:left;
+}
+
+td.graybox {
+  width:400px;
+  background-color:#003399;
+  color:#b3beff;
+  text-align:center;
+}
+
+tr.graybox {
+  width:400px;
+  background-color:#0066cc;
+  color:#b3beff;
+  text-align:center;
+}
+
+td.top-menu {
+  width:86px;
+  height:25px;
+  color:#ff0000;
+  background-color:rgba(134,116,104,1);
+  text-align:center;
+}
+
+tr.center {
+  align:center;
+}
+
+h1.pagetitle {
+  margin-left:auto;
+  margin-right:auto;
+  width:90%;
+  color: rgba(255,255,255,1);
+  font-size:50px;
+  font-family:"Verdana";
+}
+
+h2.pagehead {
+  margin-left:auto;
+  margin-right:auto;
+  width:70%;
+  color:#000084;
+  text-align:center;
+  font-size:35px;
+  font-family:"Verdana";
+}
+
+h1 {
+  color:#000084;
+  font-size:50px;
+  font-family:"Verdana";
+}
+
+h2 {
+  color:#000084;
+  text-align:center;
+  font-size:35px;
+  font-family:"Verdana";
+}
+
+p.normal {
+  color:black;
+  font-size:14px;
+  font-family:"Verdana";
+  text-align:center;
+}
+
+.button {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
+#unitreserverpt {
+    width: 200px;
+    margin: 0 auto;
+}
+
+#categoryform {
+    width: 400px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+div.reservationforms {
+    width: 350px;
+    margin: 0 auto;
+    margin-left: 80px;
+    align-items: center;
+    
+}
+
+form.reservations {
+    width: 400px;
+    margin: 0 auto;
+    align-items: center;
+    
+}
