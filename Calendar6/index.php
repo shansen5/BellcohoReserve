@@ -45,7 +45,7 @@
         </table>
         <table class="heading">
           <tr>
-            <td class="graybox">
+            <td class="top-menu">
               <a class='button' href="http://bellcoho.com/members/member-home/">Members Home Page</a></td>
           </tr>
         </table>
