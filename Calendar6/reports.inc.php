@@ -2,7 +2,7 @@
 
 require 'Struct.php';
 
-include_once 'config6.php';
+include_once '../sys/config/config.php';
 
 if ( isset($_POST['report']) ) {
     if ( isset($_POST['report']) == 'unitreserverpt' ) {
@@ -47,15 +47,18 @@ function unitreserverpt( $dbConnect, $unit, $from, $to ) {
         return "Valid from or to date not entered.";
 
     $result = "<h2>Report for unit " . $unit . "<br/> from " . $from . "<br/> to " . $to . "</h2><table border=2>";
-    $result .= '<tr> <th>&nbsp;&nbsp;Unit&nbsp;&nbsp;</th> <th>&nbsp;&nbsp;Reserved By&nbsp;&nbsp;</th> <th>&nbsp;&nbsp;Room&nbsp;&nbsp;</th> <th>&nbsp;&nbsp;Date&nbsp;&nbsp;</th></tr>';
+    $result .= '<tr> <th>&nbsp;&nbsp;Unit&nbsp;&nbsp;</th> <th>&nbsp;&nbsp;Reserved By&nbsp;&nbsp;';
+    $result .= '</th> <th>&nbsp;&nbsp;Room&nbsp;&nbsp;</th> <th>&nbsp;&nbsp;Date&nbsp;&nbsp;</th>';
+    $result .= '<th>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</th></tr>';
     $total = 0;
 
     $sql0 = "select pu.unit_id as r_unit, cr.name as room, r.day as day, r.month as month, ";
-    $sql0 .= "r.year as year, pn.first_name as first, pn.last_name as last ";
+    $sql0 .= "r.year as year, pn.first_name as first, pn.last_name as last, r.cancel_day as cancel_day, ";
+    $sql0 .= "r.cancel_month as cancel_month, r.cancel_year as cancel_year ";
     $sql0 .= "from reservations r, person_units pu, person_names pn, common_rooms cr ";
     $sql0 .= "where r.use_type = 'guest' and r.person_id = pu.person_id ";
 	$sql0 .= "and pu.type != 'owner-non-resident' ";
-    $sql0 .= "and r.room_id = cr.id and r.cancel_day is null ";
+    $sql0 .= "and r.room_id = cr.id ";
     $sql0 .= "and pu.end_date is null and pn.person_id = pu.person_id ";
     $sql0 .= "and r.year * 10000 + r.month * 100 + r.day >= " . $fr_date;
     $sql0 .= " and r.year * 10000 + r.month * 100 + r.day <= " . $to_date;
@@ -71,6 +74,11 @@ function unitreserverpt( $dbConnect, $unit, $from, $to ) {
              $result .= '<td>' . $rw0['first'] . ' ' . $rw0['last'] . '</td>';
              $result .= '<td>' . $rw0['room'] . '</td>';
              $result .= '<td>' . $month_names[ ((int)$rw0['month'])-1 ] . '-' . $rw0['day'] . '-' . $rw0['year'] . '</td>';
+             if ( $rw0['cancel_day'] ) {
+                $result .= '<td>' . $month_names[ ((int)$rw0['cancel_month'])-1 ] . '-' . $rw0['cancel_day'] . '-' . $rw0['cancel_year'] . '</td>';
+             } else {
+                $result .= '<td/>';
+             }
              $result .= '</tr>';
              $total++;
         }
@@ -89,7 +97,7 @@ function unittotalrpt( $dbConnect, $from, $to ) {
     if ( $fr_date == -1 || $to_date == -1 )
         return "Valid from or to date not entered.";
 
-    $result = "<h2>Report for all units " . " from " . $from . " to " . $to . "</h2><table border=2>";
+    $result = "<h2>Report for all units " . "<br/> from " . $from . "<br/> to " . $to . "</h2><table border=2>";
     $result .= '<tr> <th>&nbsp;&nbsp;Unit&nbsp;&nbsp;</th> <th>&nbsp;&nbsp;Nights&nbsp;&nbsp;</th></tr>';
     $total = 0;
 

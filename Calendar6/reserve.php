@@ -183,8 +183,8 @@ function CH_reserve( $dbConnect )
             } else {
                 $cur_date = new DateTime ( 
                         $fr_date['year'] . '-' . $fr_date['month'] . '-' .$fr_date['day'] );
-                $success = reserve_mtg_rooms( $dbConnect, $mtg_rooms, $cancel,
-                        $person_id, $cur_date, $series_id, $result );                
+                $success = reserve_mtg_rooms( $dbConnect, $mtg_rooms, $person_id,
+                         $cur_date, $series_id, $result );                
             }
             if ( $success ) {
                 $dbConnect->commit();
@@ -209,7 +209,7 @@ function CH_reserve( $dbConnect )
         // It is an event that doesn't need a room reservation.
         return post_event( $dbConnect, $cancel, $person_id,
                 $_POST['committee_id'], $fr_date, $_POST['from_time'], $to_date, $_POST['to_time'],
-                $_POST['purpose_id'], $_POST['description']);
+                $_POST['purpose_id'], addslashes( $_POST['description']));
     }  
         
 }
@@ -312,7 +312,8 @@ function reserve_mtg_rooms( $dbConnect, $mtg_rooms, $person_id,
     foreach( $mtg_rooms as $mtg_room_id ) {
         $success = reserve_meeting_room( $dbConnect, $mtg_room_id, $person_id, 
                 $_POST['committee_id'], $cur_date, $_POST['from_time'], $_POST['to_time'],
-                $_POST['purpose_id'], $_POST['description'], $series_id, $result );
+                $_POST['purpose_id'], addslashes( $_POST['description'] ), 
+                $series_id, $result );
     }
     if ( ! $success ) {
         return false;
@@ -508,7 +509,6 @@ function reserve_meeting_room( $dbConnect, $mtg_room_id, $person_id,
                     $results = $rs->fetch(PDO::FETCH_ASSOC);
                     if ( intval( $results['found_count2a'] ) != 0 ) {
                         $result = $MSG_rejected . 'Schedule conflict. Another meeting.<br/>'; 
-                        $result .= $sql2a . "<br/>";
                         $result .= $fr_date['month'] . ' - ' . $fr_date['day'] . "<br/>";
                         return false;
                     }

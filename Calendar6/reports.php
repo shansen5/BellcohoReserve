@@ -53,7 +53,7 @@
                     ?>
                   </p>
                   <br/>
-                  <p>Guest Room Reservations By Unit
+                  <h3>Guest Room Reservations By Unit</h3>
                   <form id="unitreserverpt">
                       <table class="reportform" border=2>
                         <tr>
