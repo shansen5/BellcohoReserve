@@ -10,6 +10,8 @@ function CH_reserve( $dbConnect )
     static $MSG_backup_error = 'Unable to add to the backup list<br/>';
     static $MSG_rejected = 'Reservation not accepted<br/>';
     static $MSG_accepted = 'Reservation accepted<br/>';
+    static $MSG_mtg_advance_limit = 'Cannot reserve for personal use more than one month in advance<br/>';
+    static $COMMITTEE_NONE = '11';
 
     $month_index = array( "JAN"=>0, "FEB"=>1, "MAR"=>2, "APR"=>3, "MAY"=>4, 
        "JUN"=>5, "JUL"=>6, "AUG"=>7, "SEP"=>8, "OCT"=>9, "NOV"=>10, "DEC"=>11 );
@@ -171,20 +173,31 @@ function CH_reserve( $dbConnect )
             $dbConnect->beginTransaction();
             $success = true;
             $result = '';
+            // If this is not for a committee, the room can only be reserved a month in advance.
+            $one_month = new DateTime("+1 month");
             if ( isset( $_POST['repeat_dow'] ) && isset( $_POST['repeat_wom'] ) 
                     && isset( $_POST['until_date'] ) && count( $_POST['repeat_dow'] ) > 0
                     && count( $_POST['repeat_wom'] ) > 0 && strlen($_POST['until_date']) > 0 ) {
+                $until_date = new DateTime( $_POST['until_date']);
+                if ( !isset( $_POST['committee_id']) || $_POST['committee_id'] === '0' 
+                        || $_POST['committee_id'] === $COMMITTEE_NONE ) {
+                    if ( $until_date > $one_month ) {
+                        return $MSG_mtg_advance_limit;
+                    }
+                }
                 $series_id = get_series_id( $dbConnect );
                 $repeat_dow = $_POST['repeat_dow'];
                 $repeat_wom = $_POST['repeat_wom'];
-                $until_date = new DateTime( $_POST['until_date']);
                 $success = reserve_series( $dbConnect, $mtg_rooms, $person_id, $series_id, $repeat_dow, 
                                           $repeat_wom, $fr_date, $until_date, $result );
             } else {
-                $cur_date = new DateTime ( 
+                $mtg_date = new DateTime ( 
                         $fr_date['year'] . '-' . $fr_date['month'] . '-' .$fr_date['day'] );
+                if ( $mtg_date > $one_month ) {
+                    return $MSG_mtg_advance_limit;
+                }
                 $success = reserve_mtg_rooms( $dbConnect, $mtg_rooms, $person_id,
-                         $cur_date, $series_id, $result );                
+                         $mtg_date, $series_id, $result );                
             }
             if ( $success ) {
                 $dbConnect->commit();
