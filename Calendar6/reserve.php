@@ -702,7 +702,8 @@ function set_backup( $dbConnect, $room_id, $person_id, $fr_date, $to_date )
                     $rs = $dbConnect->query( $sql );
                     $results = $rs->fetch(PDO::FETCH_ASSOC);
                     $found_count = intval( $results['found_count']);
-                    if ( $found_count == 0 ) {
+                    if ( $found_count > 0 ) {
+                        $d++;
                         continue;            
                     }
                 } catch(PDOException $ex) {
