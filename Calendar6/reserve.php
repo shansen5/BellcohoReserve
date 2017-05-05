@@ -193,8 +193,11 @@ function CH_reserve( $dbConnect )
             } else {
                 $mtg_date = new DateTime ( 
                         $fr_date['year'] . '-' . $fr_date['month'] . '-' .$fr_date['day'] );
-                if ( $mtg_date > $one_month ) {
-                    return $MSG_mtg_advance_limit;
+                if ( !isset( $_POST['committee_id']) || $_POST['committee_id'] === '0' 
+                        || $_POST['committee_id'] === $COMMITTEE_NONE ) {
+                    if ( $mtg_date > $one_month ) {
+                        return $MSG_mtg_advance_limit;
+                    }
                 }
                 $success = reserve_mtg_rooms( $dbConnect, $mtg_rooms, $person_id,
                          $mtg_date, $series_id, $result );                
