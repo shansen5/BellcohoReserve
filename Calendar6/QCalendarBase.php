@@ -154,6 +154,8 @@ class QCalendarBase {
                         $reserve_month = $rw['reserve_month'];
                         $reserve_day = $rw['reserve_day'];
                         $committee_id = $rw['committee_id'];
+                        $purpose_id = $rw['purpose_id'];
+                        $comment_id = $rw['comment_id'];
 
                         $reserve_date = $reserve_year . '-' . $reserve_month . '-' . $reserve_day;
 
@@ -221,7 +223,7 @@ class QCalendarBase {
                         }
 
                         $comment = '';
-                        if ( $purpose_id > 0 ) {
+                        if ( $comment_id > 0 ) {
                             try {
                                 $sql1 = "SELECT text as comment FROM ".QCALENDAR_COMMENTS_TABLE;
                                 $sql1 .= " WHERE id = " . $comment_id;
@@ -235,13 +237,25 @@ class QCalendarBase {
                                 echo "Database error" . $ex->getMessage(); //user friendly message
                             }
                         }
-                        $this->links[] = array('id'=>$rw['id'], 'use_type'=>$rw['use_type'], 
-                            'committee_name'=>$committee_name, 'day'=>$rw['day'], 'month'=>$rw['month'], 
-                            'year'=>$rw['year'], 'start_time'=>$rw['start_time'], 'end_time'=>$rw['end_time'],
-                            'room'=>$room_name, 'unit' => $unit_id, 'first_name' => $first_name, 
-                            'last_name' => $last_name, 'reserve_day'=>$rw['reserve_day'], 
-                            'reserve_month'=>$rw['reserve_month'], 'reserve_year'=>$rw['reserve_year'],
-                            'purpose'=>$purpose, 'description'=>$comment, 'backup'=>$rw['backup']);
+                        $this->links[] = array(
+                            'id'=>$rw['id'], 
+                            'use_type'=>$rw['use_type'], 
+                            'committee_name'=>$committee_name, 
+                            'day'=>$rw['day'], 
+                            'month'=>$rw['month'], 
+                            'year'=>$rw['year'], 
+                            'start_time'=>$rw['start_time'], 
+                            'end_time'=>$rw['end_time'],
+                            'room'=>$room_name, 
+                            'unit' => $unit_id, 
+                            'first_name' => $first_name, 
+                            'last_name' => $last_name, 
+                            'reserve_day'=>$rw['reserve_day'], 
+                            'reserve_month'=>$rw['reserve_month'], 
+                            'reserve_year'=>$rw['reserve_year'],
+                            'purpose'=>$purpose, 
+                            'description'=>$comment, 
+                            'backup'=>$rw['backup']);
                     }
                 } catch(PDOException $ex) {
                     echo "Database error" . $ex->getMessage(); //user friendly message
