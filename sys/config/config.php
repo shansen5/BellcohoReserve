@@ -18,12 +18,12 @@ define('QCALENDAR_WEB_PATH','/commonhouse/Calendar5');
 
 // CONFIGURE DB ACCESS
 // $dbhost = 'cohocalendar.db.10150044.hostedresource.com';
-// $dbuser = 'cohocalendar';
-// $dbpass = 'Bcca20!3';
-// $database = 'cohocalendar';
+// $dbuser = 'xxxxxxxxx';
+// $dbpass = 'xxxxxxx';
+// $database = 'xxxxxxxx';
 $dbhost = 'localhost';
-$dbuser = 'root';
-$dbpass = 'Seh0531';
+$dbuser = 'xxxxx';
+$dbpass = 'xxxxx';
 $database = 'bellcoho_reservations';
 
 // Define tables
