@@ -138,7 +138,7 @@ class QCalendarTwocolumn extends QCalendarBase {
                                 
                             } else {
                                 $message = "{$start} - ${end} - Mtg - {$val['room']}";
-                                $message .= " -- {$val['purpose']} - Committee: {$val['committee_name']} ";
+                                $message .= " -- {$val['purpose']} - Committee: {$val['committee_name']} - {$val['description']} ";
                                 $message .= "({$val['last_name']})";
                             }
                             

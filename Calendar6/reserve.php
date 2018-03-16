@@ -1493,7 +1493,7 @@ function get_comment_id( $dbConnect, $description )
             }
 
         } else {
-            return $comment_id;
+            return $results['comment_id'];
         }
     } catch(PDOException $ex) {
         echo "Database error" . $ex->getMessage(); //user friendly message
