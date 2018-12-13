@@ -31,7 +31,8 @@ final class Utils {
         if ($date === null) {
             return '';
         }
-        return $date->format('m-d-Y');
+        $formatted_date = $date->format('Y-m-d');
+        return $formatted_date;
     }
 }
 ?>

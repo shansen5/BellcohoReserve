@@ -40,7 +40,12 @@
         </table>
         <table class="heading">
           <tr>
-            <td class="top-menu"><a class='button' href="index.php">Reservations</a></td>
+            <td class="top-menu">
+                <a class='button' href="index.php">Reservations</a>
+            </td>
+            <td class="top-menu">
+                <a class='button' href="http://bellcoho.com/members/member-home/">Members Home Page</a>
+            </td>
           </tr>
         </table>
           <h2 class="pagehead">Room Reservations Reports</h2>
@@ -80,11 +85,11 @@
                         </tr>
                         <tr>
                           <td class="blackleft">From Date:</td>
-                          <td><input type='text' name='from_date' id='fromDate' size='12' id='fromDate'/></td>
+                          <td><input type='text' name='from_date' id='fromDate' size='12'/></td>
                         </tr>
                         <tr>
                           <td class="blackleft">To Date:</td>
-                          <td><input type='text' name='from_date' id='toDate' size='12' id='toDate'/></td>
+                          <td><input type='text' name='to_date' id='toDate' size='12'/></td>
                         </tr>
                         <tr>
                           <td><input class='button' type="submit" value="Generate Report"></td>
@@ -114,8 +119,8 @@
                 });
         };
     </script>
-    <script type="text/javascript"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
-    <script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script> 
+    <script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <script type="text/javascript" src="js/jquery.form.js"></script> 
     <script type="text/javascript" src="js/reports.js"></script>
 </body>
 

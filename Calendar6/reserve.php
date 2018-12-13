@@ -11,6 +11,7 @@ function CH_reserve( $dbConnect )
     static $MSG_rejected = 'Reservation not accepted<br/>';
     static $MSG_accepted = 'Reservation accepted<br/>';
     static $MSG_mtg_advance_limit = 'Cannot reserve for personal use more than one month in advance<br/>';
+    static $MSG_purpose_required = 'A purpose must be specified<br/>';
     static $COMMITTEE_NONE = '11';
 
     $month_index = array( "JAN"=>0, "FEB"=>1, "MAR"=>2, "APR"=>3, "MAY"=>4, 
@@ -148,6 +149,7 @@ function CH_reserve( $dbConnect )
         }
     }
     if ( isset($_POST['mtg_rooms'])) { 
+        $purpose = isset( $_POST['purpose_id'] ) ? $_POST['purpose_id'] : '0';
         $mtg_rooms = $_POST['mtg_rooms'];
         $is_series = false;
         $series_id = 0;
@@ -160,6 +162,9 @@ function CH_reserve( $dbConnect )
             $success = cancel_meeting_rooms( $dbConnect, $cancel_series, $mtg_rooms, 
                     $person_id, $fr_date, $from_time, $result );
             return $result;
+        }
+        if ( $purpose === '0' ) {
+            return $MSG_purpose_required;
         }
         // Go through the repeat_wom[] and repeat_dow[] arrays to repeat
         // reservations until the until_date is reached.
@@ -181,7 +186,8 @@ function CH_reserve( $dbConnect )
                 $until_date = new DateTime( $_POST['until_date']);
                 if ( !isset( $_POST['committee_id']) || $_POST['committee_id'] === '0' 
                         || $_POST['committee_id'] === $COMMITTEE_NONE ) {
-                    if ( $until_date > $one_month ) {
+                    if ( isset( $_POST['person_id']) && $_POST['person_id'] != RESERVE_ADMIN_ID 
+                            && $until_date > $one_month ) {
                         return $MSG_mtg_advance_limit;
                     }
                 }
@@ -195,7 +201,8 @@ function CH_reserve( $dbConnect )
                         $fr_date['year'] . '-' . $fr_date['month'] . '-' .$fr_date['day'] );
                 if ( !isset( $_POST['committee_id']) || $_POST['committee_id'] === '0' 
                         || $_POST['committee_id'] === $COMMITTEE_NONE ) {
-                    if ( $mtg_date > $one_month ) {
+                    if ( isset( $_POST['person_id']) && $_POST['person_id'] != RESERVE_ADMIN_ID 
+                            && $mtg_date > $one_month ) {
                         return $MSG_mtg_advance_limit;
                     }
                 }
@@ -234,9 +241,9 @@ function post_event( $dbConnect, $cancel, $person_id,
         $committee_id, $fr_date, $from_time, $to_date, $to_time, $purpose_id,
         $description)
 {
-    static $MSG_accepted = 'Reservation Accepted<br/>';
-    static $MSG_cancelled = 'Cancellation Accepted<br/>';
-    static $MSG_rejected = 'Reservation not accepted<br/>';
+    static $MSG_accepted = 'Reservation Accepted';
+    static $MSG_cancelled = 'Cancellation Accepted';
+    static $MSG_rejected = 'Reservation not accepted';
 
     // 
     $reservation_id = 0;
@@ -468,9 +475,9 @@ function reserve_meeting_room( $dbConnect, $mtg_room_id, $person_id,
         $committee_id, $fr_date, $from_time, $to_time, $purpose_id,
         $description, $series_id, &$result )
 {
-    static $MSG_accepted = 'Reservation Accepted<br/>';
-    static $MSG_cancelled = 'Cancellation Accepted<br/>';
-    static $MSG_rejected = 'Reservation not accepted<br/>';
+    static $MSG_accepted = 'Reservation Accepted';
+    static $MSG_cancelled = 'Cancellation Accepted';
+    static $MSG_rejected = 'Reservation not accepted';
     $month_index = array( "Jan"=>0, "Feb"=>1, "Mar"=>2, "Apr"=>3, "May"=>4, 
        "Jun"=>5, "Jul"=>6, "Aug"=>7, "Sep"=>8, "Oct"=>9, "Nov"=>10, "Dec"=>11 );
 

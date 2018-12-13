@@ -24,6 +24,7 @@
 define('QCALENDAR_SYS_PATH', __DIR__ );
 require_once('../sys/config/config.php');
 require_once( 'QCalendarBase.php' );
+session_start();
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -79,9 +80,9 @@ function initQCalendar($theme,  $dbConnect, $divCalendar='qCalendar', $divCalend
 
 // if user clicks on month or year navigation, re-render calendar
 if (isset($_GET['divCalendar']) && isset($_GET['m'])) {
-	initQCalendar($_GET['theme'], $dbConnect, $_GET['divCalendar'], '', 
-                $_GET['divLongDesc'], '', $_GET['d'], $_GET['m'],$_GET['y'], $_GET['c'], 1);
-	exit();
+    initQCalendar($_GET['theme'], $dbConnect, $_GET['divCalendar'], '', 
+            $_GET['divLongDesc'], '', $_GET['d'], $_GET['m'],$_GET['y'], $_GET['c'], 1);
+    exit();
 }
 ?>
 

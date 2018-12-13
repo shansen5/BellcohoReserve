@@ -154,6 +154,12 @@ p.normal {
   border-left: 1px solid #CCCCCC;
 }
 
+#googlecalendarform {
+    width: 400px;
+    margin: 5 auto;
+        
+}
+
 #unitreserverpt {
     width: 200px;
     margin: 0 auto;

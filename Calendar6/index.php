@@ -14,15 +14,18 @@
 
         <meta http-equiv="Content-Type" 
               content="text/html; charset=iso-8859-1">
-        </meta>
+       </meta>
         <meta name="robots" content="noindex" />
 
     </head>
 
     <body>
         <?php
-        // require_once( 'access.php' );
         require_once('controller.php');
+        ini_set( "log_errors", 1 );
+        ini_set( "error_log", "/tmp/php-error.log" );
+        error_log( "Hello, errors!" );
+        error_log( "hello", "/var/tmp/my-errors.log" );
 
         $month = date('m');
         $year = date('Y');
@@ -46,7 +49,12 @@
                         <table class="heading">
                             <tr>
                                 <td class="top-menu">
-                                    <a class='button' href="http://bellcoho.com/members/member-home/">Members Home Page</a></td>
+                                    <a class='button' href="http://bellcoho.com/members/member-home/">Members Home Page</a>
+                                </td>
+                                <td class="top-menu">
+                                    <a class='button' href="reports.php">View Reports</a>
+                                </td>
+                                    
                             </tr>
                         </table>
                         <table class="heading">
@@ -87,12 +95,38 @@
                                     <div class='reservationforms'>
                                         <p id="responsemessage">
                                             <?php
-                                            $response = CH_reserve($dbConnect);
-                                            echo $response;
+                                            if ( isset( $_SESSION['google_event']) && 
+                                                    !empty( $_SESSION['google_event']['result'])) {
+                                                echo $_SESSION['google_event']['result'] . '<br/>';
+                                            }
                                             ?>
                                         </p>
-
-                                        <a class='button' href="reports.php">View Reports</a>
+                                        <p id="responsemessage">
+                                            <?php
+                                            $response = CH_reserve($dbConnect);
+                                            if ( $response  == 'Reservation Accepted') {
+                                                echo $response . '<br/>';
+                                                if ( ! isset( $_POST['guest_rooms'])) {
+                                                    echo 'Also post this on the cohousing event calendar?<br/>';
+                                                    $event_array = array();
+                                                    $event_array['person_id'] = $person_id;
+                                                    $event_array['mtg_rooms'] = $mtg_rooms;
+                                                    $event_array['from_date'] = $from_date;
+                                                    $event_array['from_time'] = $from_time;
+                                                    $event_array['to_date'] = $to_date;
+                                                    $event_array['to_time'] = $to_time;
+                                                    $event_array['description'] = $description;
+                                                    $event_array['purpose_id'] = $purpose_id;
+                                                    $event_array['committee_id'] = $committee_id;
+                                                    $event_array['result'] = '';
+                                                    $_SESSION['google_event'] = $event_array;
+                                                    echo "<br/><a class='button' href='google_calendar.php'>Post Event</a>";
+                                                }
+                                            } else {
+                                                echo $response . '<br/>';
+                                            }
+                                             ?>
+                                        </p>
 
                                         <p>Guest Room Reservation</p>
                                         <form class='reservations' action="" method="post">
@@ -180,7 +214,7 @@
                                                     <td class="blackleft">
                                                         <?php
                                                         $sql1 = "SELECT id as id1, name as name1 FROM common_rooms WHERE type = 'meeting'";
-                                                        $sql1 .= " OR type = 'guest-meeting' OR type = 'great-room'";
+                                                        $sql1 .= " OR type = 'guest-meeting' OR type = 'great-room' ORDER BY name";
                                                         try {
                                                             $rs1 = $dbConnect->query($sql1);
                                                             $results = $rs1->fetchAll(PDO::FETCH_ASSOC);
@@ -230,7 +264,7 @@
                                                             $committee_name = '';
                                                             $committee_id = 0;
                                                             $sql3 = 'SELECT id as committee_id, name as committee_name ';
-                                                            $sql3 .= 'FROM committees';
+                                                            $sql3 .= 'FROM committees ORDER BY name';
                                                             try {
                                                                 $rs3 = $dbConnect->query($sql3);
                                                                 $results = $rs3->fetchAll(PDO::FETCH_ASSOC);
@@ -316,7 +350,7 @@
                                                             $purpose = '';
                                                             $purpose_id = 0;
                                                             $sql3 = 'SELECT id as purpose_id, text as purpose ';
-                                                            $sql3 .= 'FROM purposes';
+                                                            $sql3 .= 'FROM purposes ORDER BY text';
                                                             try {
                                                                 $rs3 = $dbConnect->query($sql3);
                                                                 $results = $rs3->fetchAll(PDO::FETCH_ASSOC);
@@ -393,10 +427,7 @@
                         </table>
 
                         <script type="text/javascript" src="js/jsDatePick.min.1.3.js"></script>
-                        <script type=""text/javascript"
-                        src="http://www.google.com/jsapi"></script>
-                        <script type=""text/javascript">
-                                google.load("jquery", "1.4.2");
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
                     </script>
                     <script type="text/javascript" src="js/jsDatePick.min.1.3.js"></script>
                     <script type="text/javascript">
@@ -433,6 +464,6 @@
                             });
                         };
                     </script>
-                    </body>
+    </body>
 
-                    </html>
+</html>
