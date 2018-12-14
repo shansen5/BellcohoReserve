@@ -1,8 +1,10 @@
 /*** local Javascript float routines ***************************************/
 
 var IE = document.all?true:false;
-if (!IE) document.captureEvents(Event.MOUSEMOVE)
-document.onmousemove = qCalendarGetMouseXY;
+// if (!IE) document.captureEvents(Event.MOUSEMOVE)
+// document.onmousemove = qCalendarGetMouseXY;
+if (!IE) document.addEventListener( "mousemove", qCalendarGetMouseXY );
+
 var qCalendarMouseX = 0;
 var qCalendarMouseY = 0;
 
